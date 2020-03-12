@@ -1,0 +1,79 @@
+body {
+    background-color: #e6daae;    
+}
+
+#dashboard {
+    background-color: #b3a276;
+    margin: 5px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+}
+
+.dashboard-title {
+    padding-top: 10px;
+    padding-left: 50px;
+}
+
+#banner {
+    background-color: #b3a276;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.banner-title {
+    padding-left: 40%;
+}
+
+#content {
+    background-color: #b3a276;
+    margin: 5px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+}
+
+.field-title {
+    padding-top: 5px;
+}
+
+tr, td {
+    border-bottom: 1.5px solid black;
+}
+
+th {
+    border-bottom: 2px solid black;
+    padding-right: 25px;
+}
+
+.custom-button {
+    background-color: white;
+    width: 250px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-weight: bold;
+    color: #1f2420;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border: 0 none;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.custom-submit-button {
+    background-color: white;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #1f2420;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border: 0 none;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
