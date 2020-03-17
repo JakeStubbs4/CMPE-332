@@ -23,7 +23,6 @@
       </div>
       <div class="col-md main" id="content">
         <table class="custom-table">
-            <tr><th>Driver Name</th><th>Telephone Number</th><th>License Number</th><th>Plate Number</th><th>Rescue Organization</th></tr>
             <?php
                 $organization_id = $_POST["organization_id"];
                 $dbh = new PDO('mysql:h ost=localhost;dbname=animal_database', "root", "");
@@ -31,12 +30,13 @@
                 foreach($rescue_organizations as $rescue_organization) {
                   if ($rescue_organization[0] > 0) {
                       $drivers_info = $dbh->query("select * from driver where rescue_organization = '$organization_id'");
+                      echo "<tr><th>Driver Name</th><th>Telephone Number</th><th>License Number</th><th>Plate Number</th><th>Rescue Organization</th></tr>";
                       foreach($drivers_info as $driver) {
                           echo "<tr><td>".$driver[0]."</td><td>".$driver[1]."</td><td>".$driver[2]."</td><td>".$driver[3]."</td><td>".$driver[4]."</td></tr>";
                       }
                   }
                   else {
-                      echo "<p>You have entered an invalid Rescue Organization ID.</p><a href='query3.html'><button class='custom-button'><h4>Enter a new Prganization</h4></button><a>";
+                      echo "<p>You have entered an invalid Rescue Organization ID.</p><a href='query3.html'><button class='custom-button'><h4>Enter a new Organization</h4></button><a>";
                   }
                 }
                 $dbh = null;

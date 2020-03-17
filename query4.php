@@ -32,16 +32,16 @@
                         if ($donor_count[0] > 0) {
                             $donation_info = $dbh->query("select * from donation where donor_name = '$donor_name'");
                             $donation_receivers = "";
-                            $donation_amount = 0;
+                            $total_amount = 0;
                             $count = 0;
                             foreach($donation_info as $donation) {
                                 if ($count == 0) {
-                                    $donation_receivers = $donation_receivers.$donation[0];
+                                    $donation_receivers = $donation_receivers.$donation[0]."</br>";
                                 }
                                 else {
-                                    $donation_receivers = $donation_receivers.", ".$donation[0];
+                                    $donation_receivers = $donation_receivers.$donation[0]."</br>";
                                 }
-                                $total_amount = $donation_amount + $donation[3];
+                                $total_amount = $total_amount + $donation[3];
                                 $count = $count + 1;
                             }
                             echo "<tr><th>Donation Receivers</th><th>Total Amount</th></tr>";
