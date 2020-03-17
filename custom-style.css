@@ -19,6 +19,8 @@ body {
     background-color: #b3a276;
     border-radius: 5px;
     margin: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .banner-title {

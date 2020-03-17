@@ -24,20 +24,31 @@
             </div>
             <div class="col-md main" id="content">
                 <table class="custom-table">
-                    <tr><th>Driver Name</th><th>Telephone Number</th><th>License Number</th><th>Plate Number</th><th>Rescue Organization</th></tr>
                     <?php
                     $donor_name = $_POST["donor_name"];
                     $dbh = new PDO('mysql:h ost=localhost;dbname=animal_database', "root", "");
-                    $donors = $dbh->query("select count(doner_name) from donation where donor_name = '$donor_name'");
+                    $donors = $dbh->query("select count(donor_name) from donation where donor_name = '$donor_name'");
                     foreach($donors as $donor_count) {
                         if ($donor_count[0] > 0) {
-                            $donor_info = $dbh->query("select * from donation where donor_name = '$donor_name'");
-                            foreach($drivers_info as $driver) {
-                                echo "<tr><td>".$driver[0]."</td><td>".$driver[1]."</td><td>".$driver[2]."</td><td>".$driver[3]."</td><td>".$driver[4]."</td></tr>";
+                            $donation_info = $dbh->query("select * from donation where donor_name = '$donor_name'");
+                            $donation_receivers = "";
+                            $donation_amount = 0;
+                            $count = 0;
+                            foreach($donation_info as $donation) {
+                                if ($count == 0) {
+                                    $donation_receivers = $donation_receivers.$donation[0];
+                                }
+                                else {
+                                    $donation_receivers = $donation_receivers.", ".$donation[0];
+                                }
+                                $total_amount = $donation_amount + $donation[3];
+                                $count = $count + 1;
                             }
+                            echo "<tr><th>Donation Receivers</th><th>Total Amount</th></tr>";
+                            echo "<tr><td>".$donation_receivers."</td><td>".$total_amount."</td></tr>";
                         }
                         else {
-                            echo "<p>There is no known donor by that name.</p></br><a href='query4.html'><button class='custom-button'><h4>Enter a new Donor</h4></button><a>";
+                            echo "<p>There is no known donor by that name.</p><a href='query4.html'><button class='custom-button'><h4>Enter a new Donor</h4></button><a>";
                         }
                     }
                     $dbh = null;
