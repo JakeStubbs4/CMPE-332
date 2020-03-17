@@ -29,15 +29,15 @@
                 $dbh = new PDO('mysql:h ost=localhost;dbname=animal_database', "root", "");
                 $rescue_organizations = $dbh->query("select count(telephone_number) from rescue_organization where telephone_number = '$organization_id'");
                 foreach($rescue_organizations as $rescue_organization) {
-                if ($rescue_organization[0] > 0) {
-                    $drivers_info = $dbh->query("select * from driver where rescue_organization = '$organization_id'");
-                    foreach($drivers_info as $driver) {
-                        echo "<tr><td>".$driver[0]."</td><td>".$driver[1]."</td><td>".$driver[2]."</td><td>".$driver[3]."</td><td>".$driver[4]."</td></tr>";
-                    }
-                }
-                else {
-                    echo "<p>You have entered an invalid Rescue Organization ID.</p>";
-                }
+                  if ($rescue_organization[0] > 0) {
+                      $drivers_info = $dbh->query("select * from driver where rescue_organization = '$organization_id'");
+                      foreach($drivers_info as $driver) {
+                          echo "<tr><td>".$driver[0]."</td><td>".$driver[1]."</td><td>".$driver[2]."</td><td>".$driver[3]."</td><td>".$driver[4]."</td></tr>";
+                      }
+                  }
+                  else {
+                      echo "<p>You have entered an invalid Rescue Organization ID.</p><a href='query3.html'><button class='custom-button'><h4>Enter a new Prganization</h4></button><a>";
+                  }
                 }
                 $dbh = null;
             ?>
