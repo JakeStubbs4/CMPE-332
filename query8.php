@@ -23,19 +23,18 @@
           <a href="query8.php"><button class="custom-button"><h4>Display Number of Rescued Animals</h4></button></a></br>
         </div>
         <div class="col-md main" id="content">
-          <h2>Animals in SPCA</h2>
           <table class="custom-table">
-            <tr><th>Aminal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th></tr>
+            <tr><th>Aminal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th><th>Adopter Surname</th></tr>
             <?php
             $dbh = new PDO('mysql:host=localhost;dbname=animal_database', "root", "");
             #user name and password for mysql when using XAMPP is "root" and a blank password
             $rows = $dbh->query("
-              select animal.ID, animal.animal_name, animal.species, animal.entry_date
-              from animal, spca
-              where spca.telephone_number = animal.most_recent_carer and animal.adopter_surname is null;
+              select animal.ID, animal.animal_name, animal.species, animal.entry_date, animal.adopter_surname
+              from animal, animal_transfer
+              where animal.ID = animal_transfer.animal_id and animal_transfer.transfer_date >= '2018-01-01' and animal_transfer.transfer_date <= '2018-12-31';
               ");
             foreach($rows as $row){
-              echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td></tr>";
+              echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td></tr>";
             }
             ?>
           </table>

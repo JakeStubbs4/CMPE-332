@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-md-auto sidebar" id="dashboard">
         <h2 class="dashboard-title">ACTIONS</h1>
-        <a href="query1.php"><button class="custom-button"><h4>Display Animal Information</h4></button></a></br>
+        <a href="query1.html"><button class="custom-button"><h4>Display Animal Information</h4></button></a></br>
         <a href="query2.html"><button class="custom-button"><h4>Transfer an Animal</h4></button></a></br>
         <a href="query3.html"><button class="custom-button"><h4>Get Driver Information</h4></button></a></br>
         <a href="query4.html"><button class="custom-button"><h4>Get Donor Information</h4></button></a></br>
@@ -36,7 +36,7 @@
                       }
                   }
                   else {
-                      echo "<p>You have entered an invalid Rescue Organization ID.</p><a href='query3.html'><button class='custom-button'><h4>Enter a new Organization</h4></button><a>";
+                      echo "<p>You have entered an invalid Rescue Organization ID.</p><a href='query3.html'><button class='custom-button'><h4>Enter a new Organization</h4></button></a>";
                   }
                 }
                 $dbh = null;

@@ -13,7 +13,7 @@
       <div class="row">
         <div class="col-md-auto sidebar" id="dashboard">
           <h2 class="dashboard-title">ACTIONS</h1>
-          <a href="query1.php"><button class="custom-button"><h4>Display Animal Information</h4></button></a></br>
+          <a href="query1.html"><button class="custom-button"><h4>Display Animal Information</h4></button></a></br>
           <a href="query2.html"><button class="custom-button"><h4>Transfer an Animal</h4></button></a></br>
           <a href="query3.html"><button class="custom-button"><h4>Get Driver Information</h4></button></a></br>
           <a href="query4.html"><button class="custom-button"><h4>Get Donor Information</h4></button></a></br>
@@ -26,19 +26,22 @@
           <?php
           $animal_id = $_POST["animal_id"];
           $to_id = $_POST["to_id"];
-          $dbh = new PDO('mysql:h ost=localhost;dbname=animal_database', "root", "");
+          $dbh = new PDO('mysql:host=localhost;dbname=animal_database', "root", "");
           $animal_names = $dbh->query("select animal_name from animal where ID = '$animal_id'");
-          $rows = $dbh->exec("update animal set most_recent_carer = '$to_id' where ID = '$animal_id'");
-          $adoption_agency_count = $dbh->query("select count(telephone_number) from adoption_agency where telephone_number = '$to_id'");
-          foreach($adoption_agency_count as $adoption_agency) {
-            if ($adoption_agency[0] > 0) {
+          if ($animal_names->rowCount() > 0) {
+            $adoption_agency_check = $dbh->query("select telephone_number from adoption_agency where telephone_number = '$to_id'");
+            if ($adoption_agency_check->rowCount() > 0) {
+              $rows = $dbh->exec("update animal set most_recent_carer = '$to_id' where ID = '$animal_id'");
               foreach($animal_names as $name) {
                   echo "<p>Successfully transfered ".$name[0]." to a new shelter.</p>";
               }
             }
             else {
-              echo "<p>You have entered an invalid location.</p>";
+              echo "<p>You have entered an invalid location.</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
             }
+          }
+          else {
+            echo "<p>There is no animal with the given ID.</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
           }
           $dbh = null;
           ?>

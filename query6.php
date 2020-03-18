@@ -23,19 +23,25 @@
           <a href="query8.php"><button class="custom-button"><h4>Display Number of Rescued Animals</h4></button></a></br>
         </div>
         <div class="col-md main" id="content">
-          <h2>Animals in SPCA</h2>
           <table class="custom-table">
-            <tr><th>Aminal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th></tr>
             <?php
+            $shelter_id = $_POST["telephone_number"];
             $dbh = new PDO('mysql:host=localhost;dbname=animal_database', "root", "");
-            #user name and password for mysql when using XAMPP is "root" and a blank password
-            $rows = $dbh->query("
-              select animal.ID, animal.animal_name, animal.species, animal.entry_date
-              from animal, spca
-              where spca.telephone_number = animal.most_recent_carer and animal.adopter_surname is null;
-              ");
-            foreach($rows as $row){
-              echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td></tr>";
+            $adoption_agency_check = $dbh->query("select telephone_number from adoption_agency where telephone_number = '$shelter_id'");
+            if ($adoption_agency_check->rowCount() > 0) {
+                $available_animals = $dbh->query("select ID, animal_name, species, entry_date from animal where most_recent_carer = '$shelter_id'");
+                if ($available_animals->rowCount() > 0) {
+                    echo "<h2>Available Animals</h2><tr><th>Animal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th></tr>";
+                    foreach($available_animals as $available_animal) {
+                        echo "<tr><td>".$available_animal[0]."</td><td>".$available_animal[1]."</td><td>".$available_animal[2]."</td><td>".$available_animal[3]."</td><td><a href='query6-2.html'><button class='custom-button'><h4>Adopt</h4></button></a></td></tr>";
+                    }
+                }
+                else {
+                    echo "<p>There are no animals available for adoption at this organization</p>";
+                }
+            }
+            else {
+                echo "<p>There is no known adoption agency with that telephone number</p><a href='query6.html'><button class='custom-button'><h4>Enter a new Organization</h4></button></a>";
             }
             ?>
           </table>
