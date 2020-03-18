@@ -29,7 +29,7 @@
             $dbh = new PDO('mysql:host=localhost;dbname=animal_database', "root", "");
             $adoption_agency_check = $dbh->query("select telephone_number from adoption_agency where telephone_number = '$shelter_id'");
             if ($adoption_agency_check->rowCount() > 0) {
-                $available_animals = $dbh->query("select ID, animal_name, species, entry_date from animal where most_recent_carer = '$shelter_id'");
+                $available_animals = $dbh->query("select ID, animal_name, species, entry_date from animal where most_recent_carer = '$shelter_id' and adopter_surname is NULL");
                 if ($available_animals->rowCount() > 0) {
                     echo "<h2>Available Animals</h2><tr><th>Animal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th><th></th></tr>";
                     foreach($available_animals as $available_animal) {
@@ -37,7 +37,7 @@
                     }
                 }
                 else {
-                    echo "<p>There are no animals available for adoption at this organization</p>";
+                    echo "<p>There are no animals available for adoption at this organization.</p><a href='query6.html'><button class='custom-button'><h4>Enter a new Organization</h4></button></a>";
                 }
             }
             else {

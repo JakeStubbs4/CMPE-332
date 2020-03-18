@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-md-auto sidebar" id="dashboard">
                 <h2 class="dashboard-title">ACTIONS</h1>
-                <a href="query1.php"><button class="custom-button"><h4>Display Animal Information</h4></button></a></br>
+                <a href="query1.html"><button class="custom-button"><h4>Display Animal Information</h4></button></a></br>
                 <a href="query2.html"><button class="custom-button"><h4>Transfer an Animal</h4></button></a></br>
                 <a href="query3.html"><button class="custom-button"><h4>Get Driver Information</h4></button></a></br>
                 <a href="query4.html"><button class="custom-button"><h4>Get Donor Information</h4></button></a></br>
@@ -36,12 +36,11 @@
               $payment_amount = $_POST["payment_amount"];
               $adopter_insert = "insert into adopter values ('$adopter_surname', '$street_name', '$street_num', '$adopter_city', '$adopter_country', '$postal_code', '$telephone_number')";              ;
               $adoption_transaction = "insert into adoption_transaction values ('$animal_id', CURDATE(), '$payment_amount', '$current_carer', '$adopter_surname')";
-              $animal_update = "update animal set most_recent_carer = '$telephone_number', adopter_surname = '$adopter_surname' where ID = '$animal_id'";
               $dbh = new PDO('mysql:host=localhost;dbname=animal_database', "root", "");
               $adopter_query = $dbh->exec($adopter_insert);
-              $animal_query = $dbh->exec($animal_update);
               $adoption_query = $dbh->exec($adoption_transaction);
-              echo "<p>Animal successfully adopted</p>";
+              $animal_query = $dbh->exec("update animal set adopter_surname = '$adopter_surname' where animal.ID = '$animal_id'");
+              echo "<p>Adoption successfully processed.</p>";
               ?>
             </div>
         </div>
