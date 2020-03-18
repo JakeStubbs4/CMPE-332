@@ -31,9 +31,9 @@
             if ($adoption_agency_check->rowCount() > 0) {
                 $available_animals = $dbh->query("select ID, animal_name, species, entry_date from animal where most_recent_carer = '$shelter_id'");
                 if ($available_animals->rowCount() > 0) {
-                    echo "<h2>Available Animals</h2><tr><th>Animal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th></tr>";
+                    echo "<h2>Available Animals</h2><tr><th>Animal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th><th></th></tr>";
                     foreach($available_animals as $available_animal) {
-                        echo "<tr><td>".$available_animal[0]."</td><td>".$available_animal[1]."</td><td>".$available_animal[2]."</td><td>".$available_animal[3]."</td><td><a href='query6-2.html'><button class='custom-button'><h4>Adopt</h4></button></a></td></tr>";
+                        echo "<tr><td>".$available_animal[0]."</td><td>".$available_animal[1]."</td><td>".$available_animal[2]."</td><td>".$available_animal[3]."</td><td><form action='query6-adoptioninfo.php' method='post'><input type='hidden' value='$available_animal[0]' name='animal_id'><input type='hidden' value='$shelter_id' name='current_carer'><button type='submit'>Adopt</button></form></td></tr>";
                     }
                 }
                 else {

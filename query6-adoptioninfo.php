@@ -23,11 +23,32 @@
                 <a href="query8.php"><button class="custom-button"><h4>Display Number of Rescued Animals</h4></button></a></br>
             </div>
             <div class="col-md main" id="content">
-                <form action="query6.php" method="post">
-                    <h5 class="field-title">Shelter ID (Telephone Number):</h5>
-                    <input type="text" name="telephone_number">
-                    <button class="custom-submit-button" type="submit">Get Available Pets</button>
-                </form>
+              <?php
+              $animal_id = $_POST["animal_id"];
+              $current_carer = $_POST["current_carer"];
+              echo "<h3>Adopter Information:</h3>
+                    <form action='query6-adopt.php' method='post'>
+                      <h5 class='field-title'>Surname:</h5>
+                      <input type='text' name='adopter_surname'>
+                      <h5 class='field-title'>Street Name:</h5>
+                      <input type='text' name='street_name'>
+                      <h5 class='field-title'>Street Number:</h5>
+                      <input type='text' name='street_num'>
+                      <h5 class='field-title'>City:</h5>
+                      <input type='text' name='adopter_city'>
+                      <h5 class='field-title'>Country:</h5>
+                      <input type='text' name='adopter_country'>
+                      <h5 class='field-title'>Postal Code:</h5>
+                      <input type='text' name='postal_code'>
+                      <h5 class='field-title'>Telephone Number:</h5>
+                      <input type='text' name='telephone_number'>
+                      <h5 class='field-title'>Payment Amount:</h5>
+                      <input type='text' name='payment_amount'>
+                      <input type='hidden' name='animal_id' value='$animal_id'>
+                      <input type='hidden' name='current_carer' value='$current_carer'></br>
+                      <button class='custom-submit-button' type='submit'>Complete Adoption</button>
+                    </form>";
+              ?>
             </div>
         </div>
     </div>
