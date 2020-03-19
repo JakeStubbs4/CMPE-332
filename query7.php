@@ -4,11 +4,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
     <link href="custom-style.css" type="text/css" rel="stylesheet">
   </head>
-
   <body>
     <div class="container-fluid">
       <div class="row" id="banner">
-        <h2 class="banner-title">DATABASES ASSIGNMENT</h1>
+        <h2 class="banner-title">RESCUE ANIMAL DATABASE</h1>
       </div>
       <div class="row">
         <div class="col-md-auto sidebar" id="dashboard">
@@ -24,19 +23,22 @@
         </div>
         <div class="col-md main" id="content">
           <table class="custom-table">
-            <tr><th>Aminal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th><th>Adopter Surname</th></tr>
             <?php
             $dbh = new PDO('mysql:host=localhost;dbname=animal_database', "root", "");
-            #user name and password for mysql when using XAMPP is "root" and a blank password
             $rows = $dbh->query("
               select animal.ID, animal.animal_name, animal.species, animal.entry_date, animal.adopter_surname
               from animal, shelter
               where animal.most_recent_carer = shelter.telephone_number and animal.ID not in
                 (select animal_id
                 from animal_transfer);
-              ");
-            foreach($rows as $row){
-              echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td></tr>";
+            ");
+            if ($rows->rowCount() > 0) {
+              echo "<tr><th>Aminal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th><th>Adopter Surname</th></tr>";
+              foreach($rows as $row) {
+                echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td></tr>";
+              }
+            } else {
+              echo "<p>No animals went directly from a SPCA branch to a shelter.</p>";
             }
             ?>
           </table>

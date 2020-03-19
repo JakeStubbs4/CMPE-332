@@ -8,7 +8,7 @@
   <body>
     <div class="container-fluid">
         <div class="row" id="banner">
-            <h2 class="banner-title">DATABASES ASSIGNMENT</h1>
+            <h2 class="banner-title">RESCUE ANIMAL DATABASE</h1>
         </div>
         <div class="row">
             <div class="col-md-auto sidebar" id="dashboard">

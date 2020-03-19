@@ -1,0 +1,243 @@
+drop database animal_database;
+create database animal_database;
+use animal_database;
+
+create table organization (
+    telephone_number    char(10) not null primary key,
+    street_name         varchar(20) not null,
+    street_num          int not null,
+    city                varchar(20) not null,
+    country             varchar(20) not null,
+    postal_code         char(6) not null,
+    organization_name   varchar(20)
+);
+
+create table adopter (
+    surname             varchar(20) not null primary key,
+    street_name         varchar(20) not null,
+    street_num          int not null,
+    city                varchar(20) not null,
+    country             varchar(20) not null,
+    postal_code         char(6) not null,
+    telephone_number    char(10) not null
+);
+
+create table employee (
+    employee_name       varchar(20) not null primary key,
+    street_name         varchar(20) not null,
+    street_num          int not null,
+    city                varchar(20) not null,
+    country             varchar(20) not null,
+    postal_code         char(6) not null,
+    telephone_number    char(10) not null,
+    works_for           char(10) not null,
+    foreign key(works_for) references organization(telephone_number)
+        on delete cascade
+);
+
+create table shelter (
+    telephone_number    char(10) not null primary key,
+    website             varchar(20),
+    num_dogs            int,
+    num_cats            int,
+    num_rabbits         int,      
+    num_rodents         int,
+    foreign key(telephone_number) references organization(telephone_number)
+        on delete cascade
+);
+
+create table adoption_agency (
+    telephone_number    char(10) not null primary key,
+    foreign key(telephone_number) references organization(telephone_number)
+        on delete cascade
+);
+
+create table spca (
+    telephone_number    char(10) not null primary key,
+    foreign key(telephone_number) references adoption_agency(telephone_number)
+        on delete cascade
+);
+
+create table animal (
+    ID                  char(5) not null primary key,
+    animal_name         varchar(20),
+    species             ENUM ('Cat','Dog','Rabbit','Rodent') not null,
+    entry_date 			date not null,
+    adopter_surname     varchar(20),
+    most_recent_carer   char(10) not null,
+    foreign key(adopter_surname) references adopter(surname),
+    foreign key(most_recent_carer) references adoption_agency(telephone_number)
+);
+
+create table private_organization (
+    telephone_number    char(10) not null primary key,
+    organization_owner  varchar(20) not null,
+    foreign key(telephone_number) references organization(telephone_number)
+        on delete cascade,
+    foreign key(organization_owner) references employee(employee_name)
+    	on delete cascade
+);
+
+create table rescue_organization (
+    telephone_number    char(10) not null primary key,
+    foreign key(telephone_number) references private_organization(telephone_number)
+        on delete cascade
+);
+
+create table driver (
+    driver_name         varchar(20) not null primary key,
+    telephone_number    char(10),
+    license_number      char(15) not null,
+    plate_number        varchar(7) not null,
+    rescue_organization char(10) not null,
+    foreign key(rescue_organization) references rescue_organization(telephone_number)
+        on delete cascade
+);
+
+create table donation (
+    branch_telephone  char(10) not null,
+    donor_name        varchar(20) not null,
+    donation_date     date not null,
+    amount            decimal(9,2) not null,
+    primary key(branch_telephone, donor_name, donation_date),
+    foreign key(branch_telephone) references organization(telephone_number)
+        on delete cascade
+);
+
+create table inter_organization_transaction (
+    animal_id         char(5) not null,
+    transaction_date  date not null,
+    amount            decimal(7,2),
+    transfered_to     char(10) not null,
+    transfered_from   char(10) not null,
+    primary key(animal_id, transaction_date),
+    foreign key(animal_id) references animal(ID)
+        on delete cascade,
+    foreign key(transfered_to) references spca(telephone_number)
+    	on delete cascade,
+    foreign key(transfered_from) references private_organization(telephone_number)
+    	on delete cascade
+);
+
+create table adoption_transaction (
+    animal_id         char(5) not null,
+    transaction_date  date not null,
+    amount            decimal(7,2),
+    transfered_to     char(10) not null,
+    transfered_from   varchar(20) not null,
+    primary key(animal_id, transaction_date),
+    foreign key(animal_id) references animal(ID)
+        on delete cascade,
+    foreign key(transfered_to) references adoption_agency(telephone_number)
+    	on delete cascade,
+    foreign key(transfered_from) references adopter(surname)
+    	on delete cascade
+);
+
+create table animal_transfer (
+    animal_id        char(5) not null primary key,
+    transfer_date    date not null,
+    driver_name      varchar(20) not null,
+    transfer_to      char(10) not null,
+    transfer_from    char(10) not null,
+    foreign key(animal_id) references animal(ID)
+        on delete cascade,
+    foreign key(driver_name) references driver(driver_name)
+    	on delete cascade,
+    foreign key(transfer_from) references spca(telephone_number)
+    	on delete cascade,
+    foreign key(transfer_to) references shelter(telephone_number)
+);
+
+create table vet_visit (
+    animal_id        char(5) not null,
+    visit_date       date not null,
+    vet_name         varchar(20) not null,
+    animal_condition varchar(50),
+    animal_weight    decimal(6,2),
+    primary key(animal_id, visit_date),
+    foreign key(animal_id) references animal(ID)
+        on delete cascade
+);
+
+delete from adopter;
+delete from adoption_agency;
+delete from adoption_transaction;
+delete from animal;
+delete from animal_transfer;
+delete from donation;
+delete from driver;
+delete from employee;
+delete from inter_organization_transaction;
+delete from organization;
+delete from private_organization;
+delete from rescue_organization;
+delete from shelter;
+delete from spca;
+delete from vet_visit;
+
+insert into organization values ('4164759274', 'Queen Street', '46', 'Toronto', 'Canada', 'M5B2H8', 'SPCA West');
+insert into organization values ('4164737495', 'King Street', '84', 'Toronto', 'Canada', 'N7B2H9', 'King Shelter');
+insert into organization values ('6474759874', 'John Street', '574', 'Toronto', 'Canada', 'K7H4D9', 'Ramby Rescue');
+insert into organization values ('6476666666', 'Lucifer Lane', '666', 'Toronto', 'Canada', 'L6L6L6', 'SPCA Underworld');
+insert into organization values ('4168532647', 'Nancy Ave', '92', 'Kingston', 'Canada', 'K7B2H8', 'Luke Shelter');
+
+insert into adopter values ('Kidson', 'Rochester', '141', 'Toronto', 'Canada', 'M4N1P7', '4164125708');
+insert into adopter values ('Radcliffe', 'Dunby', '14', 'Kingston', 'Canada', 'M4N1N9', '6474782608');
+insert into adopter values ('Eilish', 'Empress', '576', 'Oshawa', 'Canada', 'K7J6H5', '9054815208');
+
+insert into employee values ('Felicity Smoak', 'Flash Ave', '7', 'Starling', 'USA', 'L8K7J6', '5736475650', '4164759274');
+insert into employee values ('Kara Danvers', 'Super Ave', '6', 'National', 'USA', 'N7B6V5', '5737375660', '4164737495');
+insert into employee values ('Laurel Lance', 'Legends Ave', '6', 'Starling', 'USA', 'B6V5C4', '5436475660', '6474759874');
+insert into employee values ('Dinah Drake', 'Bat Ave', '1', 'Gotham', 'USA', 'M8NN7B6', '5736477660', '6476666666');
+insert into employee values ('John Diggle', 'Lightning Ave', '3', 'Freeli', 'USA', 'B7V6C5', '5736479860', '4168532647');
+
+insert into shelter values ('4164737495', 'www.kingshelter.com', '20', '20', '10', '20');
+insert into shelter values ('4168532647', 'www.lukeshelter.com', '40', '10', '25', '10');
+
+insert into adoption_agency values ('4164759274');
+insert into adoption_agency values ('4164737495');
+insert into adoption_agency values ('6476666666');
+insert into adoption_agency values ('4168532647');
+
+insert into spca values ('4164759274');
+insert into spca values ('6476666666');
+
+insert into animal values ('H5GDJ', 'Chester', 'Dog', '18-04-13', 'Kidson', '4164759274');
+insert into animal values ('5HSD8', 'Spot', 'Dog', '19-05-27', null, '4168532647');
+insert into animal values ('7DH9E', 'Milo', 'Cat', '19-02-14', 'Radcliffe', '4164737495');
+insert into animal values ('DNDX8', 'Otis', 'Cat', '18-06-03', null, '4168532647');
+insert into animal values ('9827H', 'Fluffy', 'Rabbit', '19-03-30', null, '6476666666');
+insert into animal values ('FNB88', 'Nugget', 'Rodent', '19-05-15','Eilish', '6476666666');
+
+insert into private_organization values ('4164737495','Kara Danvers');
+insert into private_organization values ('6474759874','Dinah Drake');
+insert into private_organization values ('4168532647','John Diggle');
+
+insert into rescue_organization values ('6474759874');
+
+insert into driver values ('Jake Stubbs','9059274738','1H7SBD7SN71HS7D','1NS7FX7','6474759874');
+insert into driver values ('Luke Skywalker','9052789837','1HSNC7DNS72NS8F','1NS728H','6474759874');
+insert into driver values ('Rachel Smith', '4168752290', '1HSNCHS82J37DE6','DGZ4LFE','6474759874');
+
+insert into donation values ('4164759274','Mr. Riche','19-11-22','500000.00');
+insert into donation values ('4164737495','Dr. Cents','20-01-10','750000.00');
+insert into donation values ('6474759874','Ms. Denero','19-12-15','430000.00');
+insert into donation values ('4164737495','Dr. Cents','18-10-07','100000.00');
+insert into donation values ('4168532647','Mr. Mula','20-01-21','950000.00');
+
+insert into inter_organization_transaction values ('H5GDJ','18-09-22','60.00','6476666666','4164737495');
+insert into inter_organization_transaction values ('5HSD8','19-12-09','200.00','6476666666','4168532647');
+insert into inter_organization_transaction values ('DNDX8','19-11-11', null,'4164759274','6474759874');
+insert into inter_organization_transaction values ('FNB88','19-08-01','950.00','4164759274','4168532647');
+
+insert into adoption_transaction values ('7DH9E','19-12-17','200.00','6476666666','Radcliffe');
+insert into adoption_transaction values ('H5GDJ','19-07-01','500.00','4164759274','Kidson');
+insert into adoption_transaction values ('FNB88','19-10-22', null,'4168532647','Eilish');
+
+insert into animal_transfer values ('DNDX8','18-11-11','Jake Stubbs','4168532647','6476666666');
+insert into animal_transfer values ('5HSD8','19-09-25','Luke Skywalker','4168532647','6476666666');
+
+insert into vet_visit values ('DNDX8','20-01-10','Dr. Pol','Stable, Check Up','10.6');
+insert into vet_visit values ('9827H','19-10-31','Dr. Mansouri','Stable, Vaccination','1.03');
+insert into vet_visit values ('DNDX8','19-08-22','Dr. Pol','Critical, Broken Femer','9.9');

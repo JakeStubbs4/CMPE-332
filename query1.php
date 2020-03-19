@@ -4,11 +4,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
     <link href="custom-style.css" type="text/css" rel="stylesheet">
   </head>
-
   <body>
     <div class="container-fluid">
       <div class="row" id="banner">
-        <h2 class="banner-title">DATABASES ASSIGNMENT</h1>
+        <h2 class="banner-title">RESCUE ANIMAL DATABASE</h1>
       </div>
       <div class="row">
         <div class="col-md-auto sidebar" id="dashboard">
@@ -23,19 +22,31 @@
           <a href="query8.php"><button class="custom-button"><h4>Display Number of Rescued Animals</h4></button></a></br>
         </div>
         <div class="col-md main" id="content">
-          <h2>Animals in SPCA</h2>
           <table class="custom-table">
-            <tr><th>Aminal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th></tr>
             <?php
+            $spca_telephone_number = $_POST["spca_telephone_number"];
             $dbh = new PDO('mysql:host=localhost;dbname=animal_database', "root", "");
-            #user name and password for mysql when using XAMPP is "root" and a blank password
             $rows = $dbh->query("
               select animal.ID, animal.animal_name, animal.species, animal.entry_date
               from animal, spca
-              where spca.telephone_number = animal.most_recent_carer and animal.adopter_surname is null;
+              where spca.telephone_number = animal.most_recent_carer and spca.telephone_number = '$spca_telephone_number' and animal.adopter_surname is null;
+            ");
+            if ($rows->rowCount() > 0) {
+              echo "<tr><th>Aminal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th></tr>";
+              foreach($rows as $row){
+                echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td></tr>";
+              }
+            } else {
+              $validSPCA = $dbh->query("
+                  select telephone_number
+                  from spca
+                  where telephone_number = '$spca_telephone_number';
               ");
-            foreach($rows as $row){
-              echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td></tr>";
+              if ($validSPCA->rowCount() == 0) {
+                echo "<p>You have entered an invalid SPCA Branch telephone number.</p><a href='query1.html'><button class='custom-button'><h4>Try Again</h4></button><a>";
+              } else {
+                echo "<p>No animals are currently housed at the SPCA brach with telephone number $spca_telephone_number.</p>";
+              }
             }
             ?>
           </table>

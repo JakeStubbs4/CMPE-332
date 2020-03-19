@@ -4,11 +4,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
     <link href="custom-style.css" type="text/css" rel="stylesheet">
   </head>
-
   <body>
     <div class="container-fluid">
       <div class="row" id="banner">
-        <h2 class="banner-title">DATABASES ASSIGNMENT</h1>
+        <h2 class="banner-title">RESCUE ANIMAL DATABASE</h1>
       </div>
       <div class="row">
         <div class="col-md-auto sidebar" id="dashboard">
@@ -24,17 +23,21 @@
         </div>
         <div class="col-md main" id="content">
           <table class="custom-table">
-            <tr><th>Aminal ID</th><th>Animal Name</th><th>Animal Species</th><th>Entry Date into System</th><th>Adopter Surname</th></tr>
             <?php
             $dbh = new PDO('mysql:host=localhost;dbname=animal_database', "root", "");
-            #user name and password for mysql when using XAMPP is "root" and a blank password
-            $rows = $dbh->query("
-              select animal.ID, animal.animal_name, animal.species, animal.entry_date, animal.adopter_surname
-              from animal, animal_transfer
-              where animal.ID = animal_transfer.animal_id and animal_transfer.transfer_date >= '2018-01-01' and animal_transfer.transfer_date <= '2018-12-31';
+            $numRescues2018 = $dbh->query("
+              select count(ID)
+              from 
+                (select animal_id as ID
+                from animal_transfer
+                where year(transfer_date) = 2018) 2018rescues;
               ");
-            foreach($rows as $row){
-              echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td></tr>";
+            foreach ($numRescues2018 as $num) {
+              if ($num[0] > 0) {
+                echo "<p>In 2018, the total number of rescued animals was: <h4>".$num[0]."</h4></p>";
+              } else {
+              echo "<p>No animal was recued by a rescue organization in 2018.</p>";
+              }
             }
             ?>
           </table>

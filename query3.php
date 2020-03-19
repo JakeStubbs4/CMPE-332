@@ -4,10 +4,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
     <link href="custom-style.css" type="text/css" rel="stylesheet">
   </head>
-
   <body>
     <div class="row" id="banner">
-      <h2 class="banner-title">DATABASES ASSIGNMENT</h1>
+      <h2 class="banner-title">RESCUE ANIMAL DATABASE</h1>
     </div>
     <div class="row">
       <div class="col-md-auto sidebar" id="dashboard">
@@ -32,11 +31,10 @@
                       $drivers_info = $dbh->query("select * from driver where rescue_organization = '$organization_id'");
                       echo "<tr><th>Driver Name</th><th>Telephone Number</th><th>License Number</th><th>Plate Number</th><th>Rescue Organization</th></tr>";
                       foreach($drivers_info as $driver) {
-                          echo "<tr><td>".$driver[0]."</td><td>".$driver[1]."</td><td>".$driver[2]."</td><td>".$driver[3]."</td><td>".$driver[4]."</td></tr>";
+                        echo "<tr><td>".$driver[0]."</td><td>".$driver[1]."</td><td>".$driver[2]."</td><td>".$driver[3]."</td><td>".$driver[4]."</td></tr>";
                       }
-                  }
-                  else {
-                      echo "<p>You have entered an invalid Rescue Organization ID.</p><a href='query3.html'><button class='custom-button'><h4>Enter a new Organization</h4></button></a>";
+                  } else {
+                    echo "<p>You have entered an invalid Rescue Organization ID.</p><a href='query3.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
                   }
                 }
                 $dbh = null;

@@ -4,11 +4,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
     <link href="custom-style.css" type="text/css" rel="stylesheet">
   </head>
-
   <body>
     <div class="container-fluid">
       <div class="row" id="banner">
-        <h2 class="banner-title">DATABASES ASSIGNMENT</h1>
+        <h2 class="banner-title">RESCUE ANIMAL DATABASE</h1>
       </div>
       <div class="row">
         <div class="col-md-auto sidebar" id="dashboard">
@@ -33,14 +32,12 @@
             if ($adoption_agency_check->rowCount() > 0) {
               $rows = $dbh->exec("update animal set most_recent_carer = '$to_id' where ID = '$animal_id'");
               foreach($animal_names as $name) {
-                  echo "<p>Successfully transfered ".$name[0]." to a new shelter.</p>";
+                echo "<p>Successfully transfered ".$name[0]." to a new shelter.</p>";
               }
-            }
-            else {
+            } else {
               echo "<p>You have entered an invalid location.</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
             }
-          }
-          else {
+          } else {
             echo "<p>There is no animal with the given ID.</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
           }
           $dbh = null;
