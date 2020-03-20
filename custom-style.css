@@ -12,7 +12,7 @@ body {
 
 .dashboard-title {
     padding-top: 10px;
-    padding-left: 50px;
+    padding-left: 25%;
 }
 
 #banner {
@@ -24,7 +24,7 @@ body {
 }
 
 .banner-title {
-    padding-left: 40%;
+    padding-left: 38%;
 }
 
 #content {
@@ -41,6 +41,7 @@ body {
 
 tr, td {
     border-bottom: 1.5px solid black;
+    padding-right: 25px;
 }
 
 th {

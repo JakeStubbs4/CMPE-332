@@ -26,31 +26,59 @@
           $animal_id = $_POST["animal_id"];
           $to_id = $_POST["to_id"];
           $dbh = new PDO('mysql:host=localhost;dbname=animal_database', "root", "");
-          $animal_info = $dbh->query("select animal_name, species from animal where ID = '$animal_id'");
-          if ($animal_info->rowCount() > 0) {
-            $adoption_agency_check = $dbh->query("select telephone_number from shelter where telephone_number = '$to_id'");
-            if ($adoption_agency_check->rowCount() > 0) {
-              foreach($animal_info as $name) {
-                $num_species = $dbh->query("select count(ID) from animal where most_recent_carer = '$to_id' and species = '$name[1]'");
-                $selector = "num_".$name[1]."s";
-                $species_capacity = $dbh->query("select ".$selector." from shelter where telephone_number = '$to_id'");
-                foreach($num_species as $num_spec) {
-                  foreach($species_capacity as $num_cap) {
-                    if ($num_spec[0] < $num_cap[0]) {
-                      $rows = $dbh->exec("update animal set most_recent_carer = '$to_id' where ID = '$animal_id'");
-                      echo "<p>Successfully transfered ".$name[0]." to a new shelter.</p>";
-                    }
-                    else {
-                      echo "<p>The shelter with telephone number ".$to_id." is already at its maximum capacity of ".$num_cap[0]." ".$name[1]."s</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
+          $animal_names = $dbh->query("select animal_name, species from animal where ID = '$animal_id'");
+          if ($animal_names->rowCount() > 0) {
+            $adopted = $dbh->query("select animal_name from animal where ID = '$animal_id' and adopter_surname is null;");
+            if ($adopted->rowCount() > 0) {
+              $adoption_agency_check = $dbh->query("select telephone_number from adoption_agency where telephone_number = '$to_id';");
+              if ($adoption_agency_check->rowCount() > 0) {
+                # need to check if the place is a shelter or an SPCA
+                $SPCA_check = $dbh->query("select telephone_number from spca where telephone_number = '$to_id';");
+                if ($SPCA_check->rowCount() > 0) {
+                  $rows = $dbh->exec("update animal set most_recent_carer = '$to_id' where ID = '$animal_id'");
+                  foreach($animal_names as $name) {
+                    echo "<p>Successfully transfered ".$name[0]." to SPCA branch ".$to_id.".</p>";
+                  }
+                } else {
+                  foreach ($animal_names as $name){
+                    $numSpeciesInShelter = $dbh->query("
+                    select count(ID)
+                    from 
+                      (select animal.ID
+                      from 
+                        animal,
+                        (select species
+                        from animal
+                        where ID = '$animal_id') animal_species
+                      where animal.species = animal_species.species and animal.most_recent_carer = '$to_id') speciesInShelter; 
+                    ");
+                    $maxSpeciesInShelter = $dbh->query("
+                    select num_dogs, num_cats, num_rabbits, num_rodents
+                    from shelter
+                    where telephone_number = '$to_id';
+                    ");
+                    foreach ($numSpeciesInShelter as $num) {
+                      foreach ($maxSpeciesInShelter as $max) {
+                        if (($name[1] == "Dog" && $num[0] < $max[0])||($name[1] == "Cat" && $num[0] < $max[1])||($name[1] == "Rabbit" && $num[0] < $max[2])||($name[1] == "Rodent" && $num[0] < $max[3])) {
+                          $rows = $dbh->exec("update animal set most_recent_carer = '$to_id' where ID = '$animal_id'");
+                          echo "<p>Successfully transfered ".$name[0]." to shelter ".$to_id.".</p>";
+                        } else {
+                          echo "<p>Shelter ".$to_id." is at maximum capacity for ".$name[1]."s.</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
+                        }
+                      }
                     }
                   }
                 }
+              } else {
+                echo "<p>You have entered an invalid location.</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
               }
             } else {
-              echo "<p>You have entered an invalid location.</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
+              foreach($animal_names as $name) {
+                  echo "<p>".$name[0]." has already been adopted and cannot be transferred.</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
+              }
             }
           } else {
-            echo "<p>There is no animal with the given ID.</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
+            echo "<p>There is no animal with ID ".$animal_id.".</p><a href='query2.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
           }
           $dbh = null;
           ?>

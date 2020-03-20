@@ -37,11 +37,11 @@
                     }
                 }
                 else {
-                    echo "<p>There are no animals available for adoption at this organization.</p><a href='query6.html'><button class='custom-button'><h4>Enter a new Organization</h4></button></a>";
+                    echo "<p>There are no animals available for adoption at this organization.</p><a href='query6.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
                 }
             }
             else {
-                echo "<p>There is no known adoption agency with that telephone number</p><a href='query6.html'><button class='custom-button'><h4>Enter a new Organization</h4></button></a>";
+                echo "<p>There is no known adoption agency with that telephone number</p><a href='query6.html'><button class='custom-button'><h4>Try Again</h4></button></a>";
             }
             ?>
           </table>

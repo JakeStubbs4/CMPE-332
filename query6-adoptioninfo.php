@@ -29,21 +29,21 @@
               echo "<h3>Adopter Information:</h3>
                     <form action='query6-adopt.php' method='post'>
                       <h5 class='field-title'>Surname:</h5>
-                      <input type='text' name='adopter_surname'>
+                      <input type='text' name='adopter_surname' required>
                       <h5 class='field-title'>Street Name:</h5>
-                      <input type='text' name='street_name'>
+                      <input type='text' name='street_name' required>
                       <h5 class='field-title'>Street Number:</h5>
-                      <input type='text' name='street_num'>
+                      <input type='text' name='street_num' required>
                       <h5 class='field-title'>City:</h5>
-                      <input type='text' name='adopter_city'>
+                      <input type='text' name='adopter_city' required>
                       <h5 class='field-title'>Country:</h5>
-                      <input type='text' name='adopter_country'>
+                      <input type='text' name='adopter_country' required>
                       <h5 class='field-title'>Postal Code:</h5>
-                      <input type='text' name='postal_code'>
+                      <input type='text' name='postal_code' required>
                       <h5 class='field-title'>Telephone Number:</h5>
-                      <input type='text' name='telephone_number'>
+                      <input type='text' name='telephone_number' required>
                       <h5 class='field-title'>Payment Amount:</h5>
-                      <input type='text' name='payment_amount'>
+                      <input type='text' name='payment_amount' value='0.00' required>
                       <input type='hidden' name='animal_id' value='$animal_id'>
                       <input type='hidden' name='current_carer' value='$current_carer'></br>
                       <button class='custom-submit-button' type='submit'>Complete Adoption</button>
